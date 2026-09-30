@@ -412,6 +412,30 @@ export const AppProvider = ({ children }) => {
     return newTicketId;
   };
 
+// Add officer/applicant response to an existing grievance
+  const addGrievanceResponse = ({ ticketId, sender, role, message }) => {
+    setGrievances(prev =>
+      prev.map(grievance =>
+        grievance.ticketId === ticketId
+          ? {
+              ...grievance,
+              latestResponse: message,
+              responses: [
+                ...(grievance.responses || []),
+                {
+                  sender,
+                  role,
+                  time: 'Just Now',
+                  message
+                }
+              ]
+            }
+          : grievance
+      )
+    );
+
+    showToast(`Response added to grievance ${ticketId}.`, 'success');
+  };
 
   // Reset to initial synthetic demo state
   const resetDemoData = () => {
